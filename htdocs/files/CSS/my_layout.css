@@ -1,0 +1,68 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS framework
+ * (en) central stylesheet
+ * (de) zentrales Stylesheet
+ *
+ * @creator       YAML Builder V1.2b (http://builder.yaml.de)
+ * @file          my_layout.css
+ * @-yaml-minver  3.1
+ * 
+ */
+
+/* import core styles | Basis-Stylesheets einbinden */
+@import url('/files/CSS/base.css');
+
+/* import screen layout | Screen-Layout einbinden */
+@import url('/files/CSS/nav_shinybuttons.css');
+@import url('/files/CSS/basemod.css');
+@import url('/files/CSS/content.css');
+
+/* import print layout | Druck-Layout einbinden 
+@import url('/files/CSS/print_draft.css'); */
+
+#profile_pic {
+	padding-top: 5px;
+}
+#username_heading {
+	font-family:Helvetica sans-serif;
+	font-size:15pt;
+	color:#000;
+}
+
+#content_box {
+	/* Brute force this content stay where I want it to*/
+	width: 700px;
+	float:left;
+	margin-right:250px;
+}
+.title_center {
+	text-align:center;
+	
+}
+.fberrorbox
+ {
+     background-color: #ffebe8;
+     border: 1px solid #dd3c10;
+     color: #333333;
+     padding: 10px;
+     font-size: 13px;
+     font-weight: bold;
+ }
+ .fbinfobox
+ {
+     background-color: #fff9d7;
+     border: 1px solid #e2c822;
+     color: #333333;
+     padding: 10px;
+     font-size: 13px;
+     font-weight: bold;
+ }
+.errors {
+	color:red;
+	font-weight:bold;
+}
+.newSnip {
+	border:0;
+	border-collapse:collapse;
+}
