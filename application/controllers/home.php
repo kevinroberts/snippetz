@@ -12,7 +12,6 @@ class Home_Controller extends Website_Controller
 		
 		// Load sessions, to support logins
 		$this->session = Session::instance();
-		//require Kohana::find_file('vendor', 'geshi', $required = TRUE);
 		
 		$this->template->template_head = '<script type="text/javascript" src="/files/jquery-1.3.2.min.js"> </script>
 		<script type="text/javascript" src="/files/jqueryUI/jquery-ui-1.7.2.custom.min.js"> </script>
@@ -288,12 +287,6 @@ class Home_Controller extends Website_Controller
 				$("#title, #snippet").defaultvalue("Your Snippet Title", "\n\n\ntype / paste snippet code here...");
 				$("#success_Message").hide();
 				$("#descriptionRow").hide();
-				$(\'#descriptionLink\').click(function() {
-				 $("#descriptionRow").slideToggle("slow", function() {
-				    // Animation complete.
-					  $("#description").focus();
-				  });
-				});
 				$(\'#private_dlg\').click(function() {
 				  	$("#dialog").dialog({
 						bgiframe: true,
@@ -320,6 +313,7 @@ class Home_Controller extends Website_Controller
 	public function snip ($id)
 	{
 		$db = Database::instance();
+		$id = mysql_real_escape_string($id);
 		$sql = 'SELECT `snip_id`, `user_id`, `language`, `snippet`, `title`, `date_added`, `private`, `description` FROM `snips` WHERE `snip_id` = '.$id.' LIMIT 0, 30 '; 
 		$result = $db->query($sql);
 		if ($result and $result->count() > 0)
@@ -375,6 +369,9 @@ class Home_Controller extends Website_Controller
 			<script type="text/javascript">
 				SyntaxHighlighter.config.clipboardSwf = "/files/syntax/scripts/clipboard.swf";
 				SyntaxHighlighter.all();
+				jQuery(function($) {
+					$("#dialog").hide();
+				});
 				</script>';
 		
 		$home_nav = new view('home_nav');
@@ -388,11 +385,19 @@ class Home_Controller extends Website_Controller
 		}
 		
 		$content = View::factory('snip/snip');
-		
-		//Clean snippet
-		//$clr_snippet = html::specialchars(base64_decode($snippet));
-		
+		if (is_object($this->user))
+		{
+		if ($this->user->id != $user_id)
+			$is_logged_in = "0";
+			else
+			$is_logged_in = "1";
+		}
+		else
+			$is_logged_in = "0";
+			
 		$content->username = $username;
+		$content->snipID = $id;
+		$content->is_logged_in = $is_logged_in;
 		$content->user_id = $user_id;
 		$content->language = $language;
 		$content->title = $title;
@@ -406,6 +411,20 @@ class Home_Controller extends Website_Controller
 		}
 		else
 			throw new Kohana_404_Exception('home/snip/'.$id);
+		
+	}
+	
+	public function library ($page) 
+	{
+		if ( ! is_object($this->user))
+		{
+			// No user is currently logged in
+			url::redirect('home/login?loginRequired=1&return_to=home~library');
+		}
+		$this->template->title = "Your Snip Library";
+		$home_nav = new view('home_nav');
+		$home_nav->highlight = 'library';
+		$this->template->page_nav = $home_nav;
 		
 	}
 }

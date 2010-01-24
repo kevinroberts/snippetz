@@ -11,6 +11,13 @@
 }
 </style>
 <script type="text/javascript">
+	function toggleDesc()
+	{
+		 $("#descriptionRow").slideToggle("fast", function() {
+		    // Animation complete.
+			  $("#description").focus();
+		  });
+	}
 	function postSnippet()
 	{
 		var title = $("#title").val();
@@ -18,7 +25,6 @@
 		var snippet = $("#snippet").val();
 		var private_check = $("#private:checked").val();
 		var description = $("#description").val();
-		//$("#language").val("PHP");
 		// Check if default values were submitted
 		if (title == 'Your Snippet Title' || title == '')
 			{
@@ -39,20 +45,24 @@
 			$("#snippet_error").text("Please enter a snippet");
 			return(false);	
 		}
-		if (! title.match(/^[A-Za-z0-9_!-()^# ]+$/))
+		if (! title.match(/^[A-Za-z0-9_`!@#$%^&*()-=+{}"\., ]+$/))
 		{
 			$("#title").effect("highlight");$("#title").focus();
 			$("#title_error").text("Please use a title with alphanumeric values only");
 			return(false);
 		}
-		if (description != '' && (! description.match(/^[A-Za-z0-9_!-()^# ]+$/)))
+		if (description.length > 1024)
 		{
 			$("#description").effect("highlight");$("#description").focus();
-			$("#description_error").text("Please use a description with alphanumeric values only");
+			$("#description_error").text("Please shorten your description to fewer than 1024 characters");
 			return(false);
 		}
 		snippet = snippet.replace("&", "~AMP~");
 		snippet = snippet.replace("=", "~EQUAL~");
+		description = description.replace("&", "~AMP~");
+		description = description.replace("=", "~EQUAL~");
+		title = title.replace("&", "~AMP~");
+		title = title.replace("=", "~EQUAL~");
 		if (private_check == 'no')
 			private_check = 0;
 		else
@@ -105,12 +115,13 @@
 		<td> <textarea name="snippet" id="snippet" rows="15" cols="70"></textarea><span id="snippet_error" class="errors"></td>
 	</tr>
 	<tr>
-		<td> <input name="private" id="private" type="checkbox" checked="checked" />  private (<a id="private_dlg" title="what does this mean?" href="#">?</a>)<span class="addDescription"><a id="descriptionLink" title="Click to add a short description" href="#">Add a description? (optional)</a></span></td>
+		<td> <input name="private" id="private" type="checkbox" checked="checked" />  private (<a id="private_dlg" title="what does this mean?" href="#">?</a>)<span class="addDescription"><a id="descriptionLink" title="Click to add a short description" href="#" onclick="toggleDesc()">Add a description? (optional)</a></span></td>
 	</tr>
 	<tr id="descriptionRow">	
 		<td>
-			<textarea name="description" id="description" rows="10" cols="70"></textarea><span id="description_error" class="errors">
+			<textarea name="description" id="description" rows="10" cols="70"></textarea><span id="description_error" class="errors"></span>
 		</td>
+		<td><a target="_blank" href="http://daringfireball.net/projects/markdown/dingus">Markdown enabled</a></td>
 	</tr>
 	<tr>
 		<td> <input name="submit" id="submit" type="button" onclick="postSnippet();" value="submit snip" /></td>

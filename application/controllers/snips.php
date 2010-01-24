@@ -10,6 +10,7 @@ class Snips_Controller extends Controller
 		
 		$this->database = new Database;
 		//$this->profiler = new Profiler;
+		require '../system/vendor/markdown.php';
 
 	}
 	
@@ -30,13 +31,19 @@ class Snips_Controller extends Controller
 			$private = $post['private_check'];
 			$description = $post['description'];
 			
-			if (valid::standard_text($title) and valid::standard_text($userID) and valid::standard_text($description) and (strlen($private) == 1)) 
+			if (valid::standard_text($title) and valid::standard_text($userID) and (strlen($private) == 1)) 
 			{
 				$preRestoreChars = array("~AMP~", "~EQUAL~");
 				$restoreChars = array("&", "=");
 				$snippet = str_replace($preRestoreChars, $restoreChars, $snippet);
+				$title = str_replace($preRestoreChars, $restoreChars, $title);
+				$description = str_replace($preRestoreChars, $restoreChars, $description);
 				$snippet = html::specialchars($snippet);
-				$description = filter_var($description,FILTER_SANITIZE_SPECIAL_CHARS);
+				$parser_class = MARKDOWN_PARSER_CLASS;
+				$parser = new $parser_class;
+				$description = $parser->transform($description);
+				$title = mysql_real_escape_string($title);
+				$snippet = mysql_real_escape_string($snippet);
 				
 				$db = Database::instance();
 				if ($description == 'null')
@@ -69,7 +76,7 @@ class Snips_Controller extends Controller
 					)
 					VALUES (
 					NULL , '".$userID."', '".$language."', '".$snippet."', '".$title."',
-					CURRENT_TIMESTAMP , '".$private."', '".$description."' 
+					CURRENT_TIMESTAMP , '".$private."', '".mysql_real_escape_string($description)."' 
 					);");	
 				}
 				if ($result)
@@ -85,6 +92,35 @@ class Snips_Controller extends Controller
 				echo "Error: title field contains illegal characters"; die();
 			}
 			
+		}
+		else
+		{
+			echo "Error: wrong params";die();
+		}
+		
+	}
+	
+	public function snip_delete()
+	{
+		$post = $_POST;
+		if (isset($post["snipID"]) and isset($post['code']))
+		{
+			if (Auth::instance()->logged_in())
+			{
+			$currentUser = Auth::instance()->get_user();
+			if ($currentUser->id == $post['code'])
+				{
+					$sql = "DELETE FROM `snips` WHERE `snips`.`snip_id` = ".mysql_real_escape_string($post['snipID'])." LIMIT 1";
+					$db = Database::instance();
+					$result = $db->query($sql);
+					echo "Success: your snippet was deleted";
+				}
+			}
+			else
+			{
+			echo "Error: Insufficient privileges"; die();
+			}
+					
 		}
 		else
 		{
