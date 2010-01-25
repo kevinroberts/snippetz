@@ -204,8 +204,7 @@ class Home_Controller extends Website_Controller
 			// Load the page title
 			$this->template->title = "Snippetz ( ".date("F d, Y", time())." )";
 			// Load the form plugins
-			$this->template->template_head = '<link rel="stylesheet" href="/files/jqtransformplugin/jqtransform.css" type="text/css" media="all" />'.
-			'<script type="text/javascript" src="/files/jqtransformplugin/jquery.js" ></script><script type="text/javascript" src="/files/jqtransformplugin/jquery.jqtransform.js" ></script>';
+			//$this->template->template_head = '';
 
 			// Load the main page navigation
 			$home_nav = new view('home_nav');
