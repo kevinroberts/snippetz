@@ -38,7 +38,7 @@ function deleteSnip()
 
 			},
 			Cancel: function() {
-				$(this).dialog('close');
+				$(this).dialog('destroy');
 			}
 		}
 	});

@@ -414,6 +414,87 @@ class Home_Controller extends Website_Controller
 		
 	}
 	
+	public function edit($id)
+	{
+		$db = Database::instance();
+		$id = mysql_real_escape_string($id);
+		$sql = 'SELECT `snip_id`, `user_id`, `language`, `snippet`, `title`, `date_added`, `private`, `description` FROM `snips` WHERE `snip_id` = '.$id.' LIMIT 0, 30 '; 
+		$result = $db->query($sql);
+		if ($result and $result->count() > 0)
+		{
+		foreach ($result as $row)
+		{		
+		   	$user_id = $row->user_id;
+		   	$language = $row->language;
+   		   	$snippet = $row->snippet;
+			$title = $row->title;
+			$date_added = $row->date_added;
+			$private = $row->private;
+			$description = $row->description;
+		}
+			// Redirect if no one is logged in and tries to edit private snippet
+			if ( ! is_object($this->user))
+			{
+				url::redirect('/home/login?loginRequired=1&return_to=home~edit~'.$id);
+			}
+			// Redirect User if they are not the owner of the snippet (Change to only if snippet is private?)
+			if ($this->user->id != $user_id)
+			{
+				url::redirect('/home/?forbiddenSnip=1&currentUser='.$this->user->id."&neededUser=".$user_id);
+			}
+	
+		$this->template->title = "Snippet Editor";
+		$home_nav = new view('home_nav');
+		$home_nav->highlight = 'none';
+		$this->template->page_nav = $home_nav;
+		
+		$this->template->template_head .= '
+		<script type="text/javascript">
+			jQuery(function($) {
+				$("#success_Message").hide();
+				$("#language").val("'.$language.'");
+				$(\'#private_dlg\').click(function() {
+				  	$("#dialog").dialog({
+						bgiframe: true,
+						modal: true,
+						width: 450,
+						buttons: {
+							Ok: function() {
+								$(this).dialog(\'destroy\');
+							}
+						}
+					});
+				});
+			});
+		</script>';
+		
+		$snips_model = new Snip_Model();
+		$langs = $snips_model->listLanguages();
+		
+		$content = View::factory('snip/edit')
+			->bind('user', $this->user);
+			
+		$content->snipID = $id;
+		$content->user_id = $user_id;
+		$content->language = $language;
+		$content->title = $title;
+		$content->snippet = $snippet;
+		$content->date_added = $date_added;
+		$content->private = $private;
+		$content->description = $description;
+		
+		$content->languages = $langs;
+		$this->template->page_content = $content;
+		
+		}
+		else
+		{
+			throw new Kohana_404_Exception('home/edit/'.$id);	
+		}
+				
+				
+	}
+	
 	public function library ($page) 
 	{
 		if ( ! is_object($this->user))
