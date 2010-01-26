@@ -494,17 +494,35 @@ class Home_Controller extends Website_Controller
 				
 	}
 	
-	public function library ($page) 
+	public function library ($page_no = 1) 
 	{
 		if ( ! is_object($this->user))
 		{
 			// No user is currently logged in
 			url::redirect('home/login?loginRequired=1&return_to=home~library');
 		}
-		$this->template->title = "Your Snip Library";
+		$userID = $this->user->id;
+		$items = new Snip_Model();
+		
+	
+		$this->pagination = new Pagination(array(
+	        'base_url'    => 'home/library/', // Set our base URL to controller 'items' and method 'page'
+	        'uri_segment' => 'library', // Our URI will look something like http://domain/items/page/19
+	        'total_items' => $items->get_total_snips($userID) // Total number of items.
+		    ));
+		//Load the snip library table
+		$snips = $items->get_snips($page_no, $this->pagination->sql_offset, $userID);
+		$content = new View('snip/snipLibrary');
+		$content->items = $snips; // page to get starting at offset, number of items to get
+		
+		$this->template->title = "Your Snippetz Library";
 		$home_nav = new view('home_nav');
 		$home_nav->highlight = 'library';
 		$this->template->page_nav = $home_nav;
+		
+		$this->template->page_content = $content;
+		
+		
 		
 	}
 }
