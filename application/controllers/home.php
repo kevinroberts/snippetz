@@ -394,11 +394,14 @@ class Home_Controller extends Website_Controller
 		else
 			$is_logged_in = "0";
 			
+		$snips_model = new Snip_Model();
+		
 		$content->username = $username;
 		$content->snipID = $id;
 		$content->is_logged_in = $is_logged_in;
 		$content->user_id = $user_id;
-		$content->language = $language;
+		$content->brush = $language;
+		$content->language = $snips_model->brush_to_lang($language);
 		$content->title = $title;
 		$content->snippet = $snippet;
 		$content->date_added = $date_added;

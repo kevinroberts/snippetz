@@ -99,7 +99,7 @@ function deleteSnip()
 </div>
 <? endif; ?>
 	<div id="codeBlock">
-		<pre class="brush: <?= $language ?>"><?= $snippet ?></pre>
+		<pre class="brush: <?= $brush ?>"><?= $snippet ?></pre>
 		<div class="code_footer">snip submitted :: <?php echo date("F j, Y, g:i a" ,strtotime($date_added)); ?> :: by <?= $username ?></div>
 	</div>
 	<?php if($description != '' || $description == 'null'):?>
