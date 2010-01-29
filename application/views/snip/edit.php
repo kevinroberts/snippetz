@@ -38,13 +38,13 @@
 			$("#description_error").text("Please shorten your description to fewer than 1024 characters");
 			return(false);
 		}
-		snippet = snippet.replace("&", "~AMP~");
-		snippet = snippet.replace("=", "~EQUAL~");
-		description = description.replace("&", "~AMP~");
-		description = description.replace("=", "~EQUAL~");
-		title = title.replace("&", "~AMP~");
-		title = title.replace("=", "~EQUAL~");
-		if (private_check == 'no')
+		snippet = snippet.replace(/&/g,"~AMP~");
+		snippet = snippet.replace(/[=]+/g, "~EQUAL~");
+		description = description.replace(/&/g, "~AMP~");
+		description = description.replace(/[=]+/g, "~EQUAL~");
+		title = title.replace(/&/g, "~AMP~");
+		title = title.replace(/[=]+/g, "~EQUAL~");
+		if (private_check === undefined)
 			private_check = 0;
 		else
 			private_check = 1;

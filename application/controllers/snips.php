@@ -27,7 +27,8 @@ class Snips_Controller extends Controller
 		{
 			$userID = $post["user"];
 			$title = $post['title'];
-			$language = $post['lang'];
+			$snips_model = new Snip_Model();
+			$language = $snips_model->brush_to_lang($post['lang']);
 			$snippet = $post['snippet'];
 			$private = $post['private_check'];
 			//$description = $post['description'];
@@ -139,7 +140,8 @@ class Snips_Controller extends Controller
 			$userID = $post["user"];
 			$snipID = mysql_real_escape_string($post["snipID"]);
 			$title = $post['title'];
-			$language = $post['lang'];
+			$snips_model = new Snip_Model();
+			$language = $snips_model->brush_to_lang($post['lang']);
 			$snippet = $post['snippet'];
 			$private = mysql_real_escape_string($post['private_check']);
 			//$description = $post['description'];

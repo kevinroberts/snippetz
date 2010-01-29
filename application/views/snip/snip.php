@@ -15,6 +15,7 @@ function postDestroy()
 	   },
 	   complete: function(data){
 		     $("#codeBlock").html(data.responseText);
+			 $("#codeBlock").addClass('fbinfobox');
 	   }
 	 });
 }
@@ -53,17 +54,20 @@ function deleteSnip()
 	float:right;
 	margin-right:11px;
 	position:relative;
-	top:-16px;
+	top:-17px;
+	color:black;
 }
 #options {
 	position:absolute;
 	top:9px;
-	left:14px;
+	left:15px;
+	color:black;
+}
+#options a {
+	color:#FFAC40;
 }
 .code_footer {
-	background-color:Gainsboro;
-	border:1px solid lightGrey;
-	color:lightslateBlue;
+	color:black;
 	display:inline-block;
 	width:99%;
 	text-align:center;
@@ -72,15 +76,17 @@ function deleteSnip()
 	font-size:medium;
 }
 .code_header {
-	background-color:Gainsboro;
-	border:1px solid lightGrey;
-	color:lightslateBlue;
+	background-color: #7375D8;
+	color:black;
+	border-bottom:1px solid #FFFFFF;
+	font-size:large;
+	font-weight:normal;
 	display:inline-block;
 	width:99%;
 	text-align:center;
 	padding-top:5px;
+	padding: 8px;
 	font-family:Helvetica;
-	font-size:large;
 }
 #snipDescription {
 	margin-top:10px;
@@ -93,7 +99,7 @@ function deleteSnip()
 <div class="code_header"> <?= $title ?> </div>
 <span id="lang">Published in: <?= $language ?></span>
 <?php if($is_logged_in == '1'): ?>
-<span id="options"><a href="/home/edit/<?= $snipID ?>">edit</a> | <a href="javascript:deleteSnip();" >delete</a></span>
+<span id="options"><a href="/home/edit/<?= $snipID ?>"><img src="/files/page-edit-icon.png" /> edit</a> | <a href="javascript:deleteSnip();" ><img src='/files/page-remove-icon.png' /> delete</a></span>
 <div id="dialog" title="Delete this snippet?">
 	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Snip will be permanently deleted and cannot be recovered. Are you sure?</p>
 </div>

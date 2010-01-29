@@ -400,8 +400,8 @@ class Home_Controller extends Website_Controller
 		$content->snipID = $id;
 		$content->is_logged_in = $is_logged_in;
 		$content->user_id = $user_id;
-		$content->brush = $language;
-		$content->language = $snips_model->brush_to_lang($language);
+		$content->brush = $snips_model->lang_to_brush($language);
+		$content->language = $language;
 		$content->title = $title;
 		$content->snippet = $snippet;
 		$content->date_added = $date_added;
@@ -497,28 +497,43 @@ class Home_Controller extends Website_Controller
 				
 	}
 	
-	public function library ($page_no = 1) 
+	public function snip_manager ()
 	{
 		if ( ! is_object($this->user))
 		{
 			// No user is currently logged in
-			url::redirect('home/login?loginRequired=1&return_to=home~library');
+			url::redirect('home/login?loginRequired=1&return_to=home~snip_manager');
 		}
 		$userID = $this->user->id;
-		$items = new Snip_Model();
+		$this->template->title = $this->user->username."'s Snippet Library";
+		$home_nav = new view('home_nav');
+		$home_nav->highlight = 'snip_manager';
+		$this->template->page_nav = $home_nav;
 		
+		$this->template->template_head .= '<link href="/files/CSS/table.css" rel="stylesheet" type="text/css">';
+		
+		$content = new View('snip/snipManager');
+		$content->userID = $userID;
+		$this->template->page_content = $content;
+		
+	}
+	
+	public function library ($page_no = 1) 
+	{
+		$items = new Snip_Model();		
 	
 		$this->pagination = new Pagination(array(
 	        'base_url'    => 'home/library/', // Set our base URL to controller 'items' and method 'page'
 	        'uri_segment' => 'library', // Our URI will look something like http://domain/items/page/19
-	        'total_items' => $items->get_total_snips($userID) // Total number of items.
+	        'total_items' => $items->get_total_snips_public() // Total number of items.
 		    ));
 		//Load the snip library table
-		$snips = $items->get_snips($page_no, $this->pagination->sql_offset, $userID);
+		$snips = $items->get_snips_public($page_no, $this->pagination->sql_offset);
 		$content = new View('snip/snipLibrary');
 		$content->items = $snips; // page to get starting at offset, number of items to get
 		
-		$this->template->title = "Your Snippetz Library";
+		$this->template->title = "Public Snippet Library";
+		$this->template->template_head .= '<link href="/files/CSS/snipLibrary.css" rel="stylesheet" type="text/css" />';
 		$home_nav = new view('home_nav');
 		$home_nav->highlight = 'library';
 		$this->template->page_nav = $home_nav;

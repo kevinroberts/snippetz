@@ -1,0 +1,86 @@
+.library {
+font:3em normal Georgia,'Times New Roman',Times,serif;
+text-align:center;
+}
+
+.favLink {
+	padding-right:10px;
+}
+
+ol.snipList {
+	margin: 20px 0;
+	padding: 0 0 0 35px;
+}
+ol.snipList li {
+	margin: 0;
+	padding: 15px 15px;
+       /*--The bevel look is styled with various colors in the border properties below--*/
+	border-bottom: 1px dotted #353535;
+}
+
+code, samp, kbd {
+	font-family: "Courier New", Courier, monospace, sans-serif;
+	text-align: left;
+	color: #555;
+	}
+pre code {
+	line-height: 1.6em;
+	font-size: 11px;
+	}
+pre {
+	padding: 0.1em 0.5em 0.3em 0.7em;
+	border-left: 11px solid #ccc;
+	margin: 1.7em 0 1.7em 0.3em;
+	overflow: auto;
+	width: 93%;
+	background-color: HoneyDew;
+	}
+/* target IE7 and IE6 */
+*:first-child+html pre {
+	padding-bottom: 2em;
+	overflow-y: hidden;
+	overflow: visible;
+	overflow-x: auto; 
+	}
+* html pre { 
+	padding-bottom: 2em;
+	overflow: visible;
+	overflow-x: auto;
+	}
+	
+/* Pagination */
+p.pagination
+{
+	text-align: center;
+    padding: 3px;
+    margin: 3px;
+}
+p.pagination a
+{
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    border: 1px solid #AAAADD;
+    text-decoration: none; /* no underline */
+    color: #000099;
+}
+p.pagination a:hover, div.pagination a:active
+{
+    border: 1px solid #000099;
+    color: #000;
+}
+p.pagination span.current
+{
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    border: 1px solid #000099;
+    font-weight: bold;
+    background-color: #993300;
+    color: #FFF;
+}
+p.pagination span.disabled
+{
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    border: 1px solid #EEE;
+    color: #DDD;
+}
